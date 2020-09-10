@@ -45,14 +45,8 @@ fun networkingModule(url: String, apiKey: String, isDebug: Boolean) = module {
         interceptor
     }
 
-    val certificatePinner = CertificatePinner.Builder()
-        .add(
-            "*.szkolniak.mobi",
-            "sha256/hTkey8ep9HlLSAsVwMLzAYtWdBMhK3P9//wFNYvVqcU="
-        ).build()
-
     single<OkHttpClient> {
-        OkHttpClient.Builder().certificatePinner(certificatePinner).apply {
+        OkHttpClient.Builder().apply {
             if (isDebug) {
                 addInterceptor(get<HttpLoggingInterceptor>())
             }
@@ -81,30 +75,12 @@ fun networkingModule(url: String, apiKey: String, isDebug: Boolean) = module {
             .build()
     }
 
-    factory<RetrofitProvider> {
-        (
-                object : RetrofitProvider {
-                    override val url: String = url
-                    override val converterFactory: Converter.Factory = get<GsonConverterFactory>()
-                })
-    }
+
 
 
 }
 
-interface RetrofitProvider {
-    val url: String
-    val converterFactory: Converter.Factory
-    fun createRetrofit(builder: OkHttpClient.Builder): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(url)
-            .client(builder.build())
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .build()
-    }
-}
 
-inline fun <reified T> Scope.getApi(okHttpClient: OkHttpClient.Builder): T = get<RetrofitProvider>().createRetrofit(okHttpClient).create(T::class.java)
 
 
 

@@ -20,7 +20,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField "String", "API_URL", '"https://api.themoviedb.org/3"'
+        buildConfigField "String", "API_URL", '"https://api.themoviedb.org/3/"'
         buildConfigField "String", "API_KEY", properties.getProperty('api_key')
     }
 
@@ -40,6 +40,10 @@ android {
 dependencies {
     implementation project(":utils:styling")
     implementation project(":utils:core")
+    implementation project(":utils:pagination")
+    implementation project(":favourites")
+    implementation project(":list")
+    implementation project(":network")
     implementation navigations
     implementation retrofit
     implementation standards

@@ -3,6 +3,7 @@ package pl.wojtek.list.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -36,7 +37,13 @@ internal class MovieListViewModel(
                 moviesProcessor.postValue(it)
             }
         }
-        loadMore()
+        viewModelScope.launch(errorHandler) {
+            withContext(coroutineUtils.io) {
+                delay(500)
+                useCase.loadNextPage()
+            }
+        }
+
     }
 
     fun loadMore() {

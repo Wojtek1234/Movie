@@ -75,7 +75,12 @@ internal class MovieListViewModelTest {
         }
     }
 
-    private fun createViewModel() = MovieListViewModel(useCase, coroutineUtils)
+    private fun createViewModel():MovieListViewModel {
+
+        val vm   = MovieListViewModel(useCase, coroutineUtils)
+        testDispatcher.advanceTimeBy(500)
+        return vm
+    }
 
     @Test
     fun `on load more trigger proper method of use case`() {

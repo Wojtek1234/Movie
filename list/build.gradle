@@ -45,6 +45,7 @@ dependencies {
     implementation depedency_injections
     implementation mvvms
     implementation gson
+    implementation google_component
 
 
     //test

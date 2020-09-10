@@ -3,9 +3,11 @@ package pl.wojtek.core.extensions
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import pl.wojtek.core.R
 
 class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
@@ -48,9 +50,21 @@ inline fun <T> listAdapter(vhResourceId: Int, diffCallback: ItemCallback<T>, cro
     }
 
 
+
+
 interface ListElement{
     abstract val layoutRes: Int
     abstract val id: String
     fun isTheSame(obj: ListElement): Boolean = obj.id == this.id
     fun isContentTheSame(obj: ListElement): Boolean = obj == this
+}
+
+
+fun RecyclerView.scheduleAnimationIfEmptyAdapter(horizontal: Boolean = false) {
+    if (this.adapter?.itemCount == 0) {
+        val controller =
+            AnimationUtils.loadLayoutAnimation(context, if (!horizontal) R.anim.layout_animation else R.anim.layout_animation_horizontal)
+        layoutAnimation = controller
+        scheduleLayoutAnimation()
+    }
 }

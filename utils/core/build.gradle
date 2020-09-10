@@ -49,4 +49,5 @@ dependencies {
     implementation mvvms
     implementation navigations
     implementation retrofit
+    implementation picasso
 }

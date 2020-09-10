@@ -1,11 +1,14 @@
 package pl.wojtek.list.domain
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.launch
 import mobi.wojtek.pagination.coroutine.CoroutinePaginModel
+import pl.wojtek.core.delegate.BoundCoroutineScopeDelegate
 import pl.wojtek.favourites.FavouriteRepository
 import pl.wojtek.list.data.network.NetworkMovie
 import pl.wojtek.list.data.network.NetworkMovieResponse
@@ -23,6 +26,14 @@ internal class LoadMoviesUseCase(
     private val queryChannel = ConflatedBroadcastChannel<String>("")
     private val loadMoviesChannel = BroadcastChannel<List<NetworkMovie>>(1)
 
+    private val scope by BoundCoroutineScopeDelegate()
+
+    init {
+        scope.launch{
+            paginModel.setQuery(Unit)
+        }
+
+    }
 
     private val loadMoviesFlow: Flow<List<Movie>>
         get() = loadMoviesChannel.asFlow()

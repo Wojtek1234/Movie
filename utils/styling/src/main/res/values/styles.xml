@@ -33,8 +33,9 @@
     </style>
 
     <style name="ImagePosterList" parent="">
-        <item name="cornerFamilyTopLeft">@dimen/corner_radius</item>
-        <item name="cornerFamilyBottomLeft">@dimen/corner_radius</item>
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">@dimen/corner_radius</item>
+        <item name="cornerSizeBottomLeft">@dimen/corner_radius</item>
     </style>
 
 

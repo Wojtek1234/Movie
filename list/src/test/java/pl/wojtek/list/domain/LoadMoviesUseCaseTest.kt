@@ -170,7 +170,7 @@ internal class LoadMoviesUseCaseTest {
 
 fun networkMovie(it: Int) = NetworkMovie(
     false, "back$it", emptyList(), it, "$it", "orginal", "overview$it",
-    12.12 * it, "poster$it", "release$it", "title$it", false, it, it
+    12.12 * it, "poster$it", "release$it", "title$it", false, it.toDouble(), it
 )
 
 private fun network(movies: List<NetworkMovie> = (0..10).map { networkMovie(it) }) = NetworkMovieResponse(Dates("a", "b"), 1, movies, 123, 123)
