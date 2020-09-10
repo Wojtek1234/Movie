@@ -20,10 +20,15 @@ import pl.wojtek.list.domain.LoadMoviesUseCase
 import pl.wojtek.list.domain.Movie
 import pl.wojtek.testutils.MainCoroutineScopeRule
 import pl.wojtek.testutils.test
+import kotlin.random.Random
 
 /**
  *
  */
+internal fun createRandomMovies()=  (0..Random.nextInt(20)).map { createMovie(it) }
+
+internal fun createMovie(it: Int) = Movie("title$it", "image$it", it % 2 == 0, it)
+
 internal class MovieListViewModelTest {
 
     @get:Rule
@@ -83,6 +88,7 @@ internal class MovieListViewModelTest {
 
             //then
             coVerifySequence {
+                useCase.loading()
                 useCase.loadedMovies()
                 useCase.loadNextPage()
                 useCase.loadNextPage()
@@ -90,13 +96,14 @@ internal class MovieListViewModelTest {
         }
     }
 
+
     @Test
     fun `when data from use case appears on live data from view model `() {
         runBlockingTest {
             //given
             viewModel = createViewModel()
-            val listOfMovies = (0..120).map { Movie("title$it", "image$it", it % 2 == 0, it) }
-            val tottalyDifferentListOfMovies = (2..123).map { Movie("title$it", "image$it", it % 2 == 0, it) }
+            val listOfMovies = createRandomMovies()
+            val tottalyDifferentListOfMovies = createRandomMovies()
 
             //when
             val testStream = viewModel.moviesStream.test()
@@ -146,6 +153,20 @@ internal class MovieListViewModelTest {
             //when
             loadingChannel.send(false)
             testProgress.assertValueAt(2,false)
+        }
+    }
+
+    @Test
+    fun `when setting filter query trigger proper method of use case`() {
+        runBlockingTest {
+            //given
+            //given
+            viewModel = createViewModel()
+            //when
+
+            viewModel.setFilterQuery("query")
+            //then
+            coVerify { useCase.setFilterQuery("query") }
         }
     }
 

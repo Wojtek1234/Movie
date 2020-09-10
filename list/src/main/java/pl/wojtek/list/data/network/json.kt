@@ -13,7 +13,7 @@ data class NetworkMovieResponse(
     @SerializedName("page")
     val page: Int,
     @SerializedName("results")
-    val results: List<Result>,
+    val networkMovies: List<NetworkMovie>,
     @SerializedName("total_pages")
     val totalPages: Int,
     @SerializedName("total_results")
@@ -27,7 +27,7 @@ data class Dates(
     val minimum: String
 )
 
-data class Result(
+data class NetworkMovie(
     @SerializedName("adult")
     val adult: Boolean,
     @SerializedName("backdrop_path")
