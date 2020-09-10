@@ -37,6 +37,11 @@ class TestLiveDataObserver<T>(
         return this
     }
 
+    fun assertValueAt(position: Int, value: T): TestLiveDataObserver<T> {
+        Assert.assertEquals(values[position], value)
+        return this
+    }
+
     fun finish() {
         liveData.removeObserver(observer)
     }

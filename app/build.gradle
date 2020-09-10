@@ -39,14 +39,12 @@ android {
 
 dependencies {
     implementation project(":utils:styling")
+    implementation project(":utils:core")
     implementation navigations
     implementation retrofit
     implementation standards
     implementation constrain
     implementation coroutines
     implementation depedency_injections
-    implementation firebase
-
-
 
 }

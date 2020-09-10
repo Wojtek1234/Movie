@@ -5,6 +5,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 
 /**
@@ -32,6 +33,11 @@ class TestObserver<T>(
 
     fun assertValues(vararg values: T): TestObserver<T> {
         assertEquals(values.toList(), this.values)
+        return this
+    }
+
+    fun assertValueAt(position: Int, value: T): TestObserver<T> {
+        assertEquals(values[position], value)
         return this
     }
 
