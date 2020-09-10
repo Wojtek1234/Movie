@@ -5,5 +5,5 @@
     <dimen name="quad_margin">32dp</dimen>
     <dimen name="big_margin">48dp</dimen>
     <dimen name="triple_margin">24dp</dimen>
-
+    <dimen name="corner_radius">25dp</dimen>
 </resources>

@@ -37,4 +37,5 @@ android {
 dependencies {
     implementation standards
     implementation constrain
+    implementation google_component
 }
