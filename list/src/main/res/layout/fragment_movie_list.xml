@@ -17,12 +17,12 @@
             android:layout_marginTop="@dimen/double_margin"
             android:drawableEnd="@drawable/ic_baseline_search_24"
             android:hint="@string/hint_search_movie"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:maxLines="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:maxLines="1"
-            android:inputType="text"
-            android:imeOptions="actionDone"
             />
 
 
@@ -40,8 +40,11 @@
                 android:id="@+id/moviesRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingBottom="@dimen/triple_margin"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="1"
+                tools:itemCount="7"
                 tools:listitem="@layout/vh_movie_element"
                 />
 

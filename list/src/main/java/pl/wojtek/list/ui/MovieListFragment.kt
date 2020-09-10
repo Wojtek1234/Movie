@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_movie_list.*
 import kotlinx.android.synthetic.main.vh_movie_element.view.*
 import mobi.wojtek.pagination.coroutine.CoroutinePaginModelFactory
@@ -57,6 +58,14 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
                 submitList(it)
             }
         }
+        moviesRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(1)) {
+                    viewModel.loadMore()
+                }
+            }
+        })
     }
 }
 
