@@ -1,0 +1,11 @@
+<manifest
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        package="pl.wojtek.uitest">
+
+    <application>
+        <activity
+                android:name="androidx.fragment.app.FragmentActivity"
+                android:theme="@style/AppTheme" />
+    </application>
+
+</manifest>

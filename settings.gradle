@@ -1,0 +1,10 @@
+include ':list'
+include ':app'
+include ':network'
+include ':utils:core'
+include ':utils:preferences'
+include ':utils:testutils'
+include ':utils:uitest'
+include ':utils:styling'
+include ':utils:pagination'
+rootProject.name = "Movie"

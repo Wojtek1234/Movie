@@ -1,0 +1,188 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext.kotlin_version = '1.4.0'
+
+    ext {
+
+        // global variables
+        compile_sdk_version = 30
+        min_sdk_version = 19
+        core_ktx = '1.3.1'
+
+        androidx_compat = '1.2.0'
+        constrain_version = '2.0.0-beta4'
+        swiperefresh = '1.1.0'
+        recyclerview_ver = '1.2.0-alpha05'
+
+        kotlin_std = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+        app_compat = "androidx.appcompat:appcompat:$androidx_compat"
+        kotlin_core_ktx = "androidx.core:core-ktx:$core_ktx"
+        def refreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:$swiperefresh"
+        recyclerview = "androidx.recyclerview:recyclerview:$recyclerview_ver"
+        constrain = "androidx.constraintlayout:constraintlayout:$constrain_version"
+        fab = 'com.google.android.material:material:1.3.0-alpha02'
+        google_component = fab
+        card_view = "androidx.cardview:cardview:1.0.0"
+        view_pager = "androidx.viewpager2:viewpager2:1.1.0-alpha01"
+        dots_indicator = 'com.tbuonomo.andrui:viewpagerdotsindicator:4.1.2'
+        flexboxlayout = 'com.google.android:flexbox:2.0.1'
+        notification_media = "androidx.media:media:1.1.0"
+        //koin
+        koin_version = '2.1.5'
+        koin = "org.koin:koin-android:$koin_version"
+        def koin_viewmodel = "org.koin:koin-androidx-viewmodel:$koin_version"
+        def koin_scope = "org.koin:koin-androidx-scope:$koin_version"
+
+        //rxjava
+        rxkotlin_version = '2.4.0'
+        rx_kotlin = "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
+        rx_android = "io.reactivex.rxjava2:rxandroid:2.1.1"
+
+        //mvvm
+        lifecycle = '2.2.0'
+        def livedata_version = '2.3.0-alpha06'
+        def view_model = "androidx.lifecycle:lifecycle-viewmodel:$lifecycle"
+        def view_model_ext = "androidx.lifecycle:lifecycle-extensions:$lifecycle"
+        view_model_live_data = "androidx.lifecycle:lifecycle-livedata-ktx:$livedata_version"
+        lifecycle_runtime= "androidx.lifecycle:lifecycle-runtime-ktx:$livedata_version"
+        def view_model_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle"
+
+        //navigation
+        nav_version = "2.3.0"
+        def navigation = "androidx.navigation:navigation-fragment-ktx:$nav_version"
+        def ui_navigation = "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+        //networking
+        retrofit_gson_version = '2.9.0'
+        retrofit_version = '2.9.0'
+
+        gson = "com.squareup.retrofit2:converter-gson:$retrofit_gson_version"
+        retrofit = "com.squareup.retrofit2:retrofit:$retrofit_version"
+        scalar =  "com.squareup.retrofit2:converter-scalars:$retrofit_version"
+        loggingInter = 'com.squareup.okhttp3:logging-interceptor:4.7.2'
+
+        def ok_http = 'com.squareup.okhttp3:okhttp:4.7.2'
+
+        //unit tests
+        kotlin_test_ver = '3.4.2'
+        def mockito_kotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
+        def kotlin_junit = "org.jetbrains.kotlin:kotlin-test-junit:${kotlin_version}"
+        def kotlin_test = "io.kotlintest:kotlintest-runner-junit5:$kotlin_test_ver"
+        def kotlin_test4 = "io.kotlintest:kotlintest-runner-junit4:$kotlin_test_ver"
+        atchitcture_component_test = "androidx.arch.core:core-testing:2.1.0"
+
+        //android testing
+        def testRunnerVersion = "1.2.0"
+        def test_runner = "androidx.test:runner:$testRunnerVersion"
+        def test_rules = "androidx.test:rules:$testRunnerVersion"
+
+
+        //coroutines
+        def coroutines_android_version = '1.3.9'
+        coroutines_core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_android_version"
+        coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${coroutines_android_version}"
+
+        corouines_test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_android_version"
+        standards = [
+                kotlin_std, app_compat, kotlin_core_ktx, refreshlayout, recyclerview, 'com.google.android.material:material:1.3.0-alpha02'
+        ]
+
+        mvvms = [
+                view_model, view_model_ext, view_model_live_data, view_model_ktx,lifecycle_runtime
+        ]
+
+        depedency_injection = [
+                koin
+        ]
+        depedency_injections = [
+                koin, koin_viewmodel, koin_scope
+        ]
+
+        networking = [
+                retrofit, gson, loggingInter,scalar
+        ]
+
+
+        navigations = [
+                navigation, ui_navigation
+        ]
+
+        coroutines = [
+                coroutines_core, coroutines_android
+        ]
+        android_integration_test = [
+                test_runner, test_rules
+        ]
+
+        //UI testing
+        espresso =  'androidx.test.espresso:espresso-core:3.2.0'
+        kakao =  'com.agoda.kakao:kakao:2.1.0'
+        mock_android =  'io.mockk:mockk-android:1.9.3'
+        unit_tests = [
+                kotlin_junit, kotlin_test,mock_android
+        ]
+        unit_tests4 = [
+                kotlin_junit, kotlin_test4,mock_android
+        ]
+        android_ui_testing = [
+                espresso,kakao,mock_android
+        ]
+        view_pagers = [
+                view_pager, dots_indicator
+        ]
+
+        //room
+        def room_version = '2.2.5'
+        def room = "androidx.room:room-ktx:$room_version"
+        room_kapt = "androidx.room:room-compiler:$room_version"
+        database = [
+                room
+        ]
+        database_kapt = [
+                room_kapt
+        ]
+
+        ///firebase
+        analitics = 'com.google.firebase:firebase-analytics-ktx:17.5.0'
+        def crashlitics = 'com.google.firebase:firebase-crashlytics:17.2.1'
+        dynamicLinks = 'com.google.firebase:firebase-dynamic-links-ktx:19.1.0'
+
+        fcm = 'com.google.firebase:firebase-messaging:20.2.3'
+        def location = "com.google.android.gms:play-services-location:17.0.0"
+        auth =  'com.google.android.gms:play-services-auth:18.1.0'
+        firebase = [
+                analitics, crashlitics, dynamicLinks
+        ]
+
+        //google
+        play_core_ligrary = 'com.google.android.play:core:1.8.0'
+
+        picasso = 'com.squareup.picasso:picasso:2.71828'
+
+
+    }
+    repositories {
+        google()
+        jcenter()
+
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.gms:google-services:4.3.3'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.2.1'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
