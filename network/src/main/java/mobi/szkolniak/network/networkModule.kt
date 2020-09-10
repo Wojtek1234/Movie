@@ -1,13 +1,10 @@
 package mobi.szkolniak.network
 
 import com.google.gson.GsonBuilder
-import okhttp3.CertificatePinner
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.core.scope.Scope
 import org.koin.dsl.module
-import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -21,15 +18,12 @@ import java.util.concurrent.TimeUnit
 
 private const val TIMEOUT = 60L
 
-const val WITH_CLIENT = "with_client"
-
 fun networkingModule(url: String, apiKey: String, isDebug: Boolean) = module {
 
     single { HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY } }
 
     single {
         val interceptor = Interceptor { chain ->
-
             val request = chain.request()
             val url = request.url.newBuilder().addQueryParameter(
                 "api_key", apiKey

@@ -1,6 +1,5 @@
 package pl.wojtek.list.domain
 
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
@@ -32,7 +31,6 @@ internal class LoadMoviesUseCase(
         scope.launch{
             paginModel.setQuery(Unit)
         }
-
     }
 
     private val loadMoviesFlow: Flow<List<Movie>>

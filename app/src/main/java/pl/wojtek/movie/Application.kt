@@ -27,8 +27,6 @@ class Application : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
-
         startKoin {
             androidLogger(Level.ERROR)
             androidContext(this@Application)
@@ -40,6 +38,5 @@ class Application : Application() {
                         + coreModules + moviesModules
             )
         }
-
     }
 }

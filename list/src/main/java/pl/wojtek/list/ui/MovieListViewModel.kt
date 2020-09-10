@@ -25,25 +25,25 @@ internal class MovieListViewModel(
     private val moviesProcessor = MutableLiveData<List<Movie>>()
     val moviesStream: LiveData<List<Movie>> get() = moviesProcessor
 
-
     init {
         viewModelScope.launch {
             useCase.loading().collect {
                 showProgressProcessor.postValue(it)
             }
         }
+
         viewModelScope.launch {
             useCase.loadedMovies().collect {
                 moviesProcessor.postValue(it)
             }
         }
+
         viewModelScope.launch(errorHandler) {
             withContext(coroutineUtils.io) {
                 delay(500)
                 useCase.loadNextPage()
             }
         }
-
     }
 
     fun loadMore() {
