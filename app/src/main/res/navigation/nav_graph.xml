@@ -9,5 +9,17 @@
             android:id="@+id/movieListFragment"
             android:name="pl.wojtek.list.ui.MovieListFragment"
             android:label="Now played movies"
-            tools:layout="@layout/fragment_movie_list"/>
+            tools:layout="@layout/fragment_movie_list">
+        <action
+                android:id="@+id/action_movieListFragment_to_movieDetailsFragment"
+                app:destination="@id/movieDetailsFragment"
+                app:enterAnim="@android:anim/fade_in"
+                app:exitAnim="@android:anim/fade_out"
+                app:popEnterAnim="@android:anim/fade_in"
+                app:popExitAnim="@android:anim/fade_out" />
+    </fragment>
+    <fragment
+            android:id="@+id/movieDetailsFragment"
+            android:name="pl.wojtek.details.ui.MovieDetailsFragment"
+            android:label="MovieDetailsFragment" />
 </navigation>

@@ -43,6 +43,7 @@ dependencies {
     implementation project(":utils:pagination")
     implementation project(":favourites")
     implementation project(":list")
+    implementation project(":details")
     implementation project(":network")
     implementation navigations
     implementation retrofit

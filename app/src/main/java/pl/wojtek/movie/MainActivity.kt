@@ -1,11 +1,41 @@
 package pl.wojtek.movie
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.flow.collect
+import org.koin.android.ext.android.inject
+import pl.wojtek.list.ListNavigationListener
 
 class MainActivity : AppCompatActivity() {
+
+
+    private val listNavigationListener: ListNavigationListener by inject()
+    private val navController by lazy { navHostFragment.findNavController() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        lifecycleScope.launchWhenResumed {
+            listNavigationListener.openMovieDetails().collect {
+
+                if (navController.currentDestination?.id == R.id.movieListFragment)
+                    navController.navigate(
+                        R.id.action_movieListFragment_to_movieDetailsFragment,
+                        bundleOf(getString(R.string.movie_details_argument) to it.first),
+                        null,
+                        FragmentNavigatorExtras(
+                            it.second to "${getString(R.string.movie_poster_key)}${it.first}"
+                        )
+                    )
+
+
+            }
+        }
     }
 }

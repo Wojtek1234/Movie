@@ -50,4 +50,5 @@ dependencies {
     implementation navigations
     implementation retrofit
     implementation picasso
+    implementation gson
 }

@@ -10,6 +10,7 @@ import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import pl.wojtek.core.coreModules
+import pl.wojtek.details.ui.detailsModule
 import pl.wojtek.favourites.favouriteModules
 import pl.wojtek.list.moviesModules
 import pl.wojtek.movie.BuildConfig.API_KEY
@@ -32,7 +33,7 @@ class Application : Application() {
             androidContext(this@Application)
             modules(
                 listOf(
-                    appModule(), networkingModule(apiUrl, apiKey, BuildConfig.DEBUG), coroutinePaginationModule
+                    appModule(), networkingModule(apiUrl, apiKey, BuildConfig.DEBUG), coroutinePaginationModule, detailsModule
 
                 )
                         + coreModules + moviesModules + favouriteModules

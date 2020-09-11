@@ -3,12 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion compile_sdk_version
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 30
+        minSdkVersion min_sdk_version
+        targetSdkVersion compile_sdk_version
         versionCode 1
         versionName "1.0"
 
@@ -22,15 +22,34 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.1'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation project(":utils:styling")
+    implementation project(":utils:core")
+    implementation project(":favourites")
 
+    implementation standards
+    implementation constrain
+    implementation depedency_injections
+    implementation mvvms
+    implementation gson
+    implementation google_component
+
+
+    //test
+    testImplementation unit_tests4
+    testImplementation corouines_test
+    testImplementation atchitcture_component_test
+    testImplementation project(":utils:testutils")
 }
