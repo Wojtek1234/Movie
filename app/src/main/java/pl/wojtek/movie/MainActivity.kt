@@ -14,7 +14,6 @@ import pl.wojtek.list.ListNavigationListener
 
 class MainActivity : AppCompatActivity() {
 
-
     private val listNavigationListener: ListNavigationListener by inject()
     private val navController by lazy { navHostFragment.findNavController() }
 
@@ -31,9 +30,9 @@ class MainActivity : AppCompatActivity() {
                     this.finish()
                 }.show()
         }
+
         lifecycleScope.launchWhenResumed {
             listNavigationListener.openMovieDetails().collect {
-
                 if (navController.currentDestination?.id == R.id.movieListFragment)
                     navController.navigate(
                         R.id.action_movieListFragment_to_movieDetailsFragment,
@@ -43,8 +42,6 @@ class MainActivity : AppCompatActivity() {
                             it.second to "${getString(R.string.movie_poster_key)}${it.first}"
                         )
                     )
-
-
             }
         }
     }
