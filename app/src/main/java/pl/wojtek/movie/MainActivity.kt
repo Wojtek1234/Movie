@@ -1,6 +1,7 @@
 package pl.wojtek.movie
 
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
@@ -21,6 +22,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        if (BuildConfig.API_KEY.isEmpty()) {
+            AlertDialog.Builder(this)
+                .setTitle("NO API KEY")
+                .setMessage("You need to put valid api key through gradle file")
+                .setPositiveButton(R.string.ok) { d, _ ->
+                    d.dismiss()
+                    this.finish()
+                }.show()
+        }
         lifecycleScope.launchWhenResumed {
             listNavigationListener.openMovieDetails().collect {
 
