@@ -1,3 +1,4 @@
+include ':details'
 include ':favourites'
 include ':list'
 include ':app'
