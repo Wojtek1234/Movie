@@ -1,4 +1,4 @@
-package pl.wojtek.list.domain
+package pl.wojtek.list.domain.load
 
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
@@ -11,6 +11,7 @@ import pl.wojtek.core.delegate.BoundCoroutineScopeDelegate
 import pl.wojtek.favourites.FavouriteRepository
 import pl.wojtek.list.data.network.NetworkMovie
 import pl.wojtek.list.data.network.NetworkMovieResponse
+import pl.wojtek.list.domain.Movie
 
 /**
  *

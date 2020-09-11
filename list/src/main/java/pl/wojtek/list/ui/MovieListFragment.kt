@@ -17,9 +17,10 @@ import pl.wojtek.core.image.ImageLoader
 import pl.wojtek.list.R
 import pl.wojtek.list.data.network.MoviesDataSource
 import pl.wojtek.list.data.network.MoviesNetworkDataMapper
-import pl.wojtek.list.domain.LoadMoviesUseCase
-import pl.wojtek.list.domain.Mapper
 import pl.wojtek.list.domain.Movie
+import pl.wojtek.list.domain.favourite.ChangeFavouriteStatusUseCase
+import pl.wojtek.list.domain.load.LoadMoviesUseCase
+import pl.wojtek.list.domain.load.Mapper
 
 /**
  *
@@ -51,6 +52,9 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
             itemCallback { areItemsTheSame { t1, t2 -> t1.id == t2.id } }) { _, movie: Movie ->
             imageLoader.loadImageToImageView(movie.imageUrl, vhMovieImagePoster)
             vhMovieLoveIcon.setImageResource(if (movie.isLoved) R.drawable.ic_baseline_star_24 else R.drawable.ic_outline_star_border_24)
+            vhMovieLoveIcon.setOnClickListener {
+                viewModel.changeMovieFavouriteStatus(movie)
+            }
             vhMovieTitle.text = movie.title
         }.apply {
             observe(viewModel.moviesStream) {
@@ -70,8 +74,9 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
 }
 
 internal val movieListModule = module {
-    viewModel { MovieListViewModel(get(),get()) }
+    viewModel { MovieListViewModel(get(), ChangeFavouriteStatusUseCase(get()), get()) }
     factory {
         val paginModel = get<CoroutinePaginModelFactory>().createPaginModel(MoviesDataSource(getApi()), MoviesNetworkDataMapper())
-        LoadMoviesUseCase(paginModel,get(), Mapper(get())) }
+        LoadMoviesUseCase(paginModel, get(), Mapper(get()))
+    }
 }

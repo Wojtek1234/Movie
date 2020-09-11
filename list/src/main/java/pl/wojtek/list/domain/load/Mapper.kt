@@ -1,8 +1,9 @@
-package pl.wojtek.list.domain
+package pl.wojtek.list.domain.load
 
 import pl.wojtek.core.ImageUrlProvider
 import pl.wojtek.favourites.FavouriteMovie
 import pl.wojtek.list.data.network.NetworkMovie
+import pl.wojtek.list.domain.Movie
 
 /**
  *

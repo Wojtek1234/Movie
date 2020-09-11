@@ -1,13 +1,13 @@
 package pl.wojtek.favourites
 
 import org.koin.dsl.module
+import pl.wojtek.favourites.db.dbModule
 
 /**
  *
  */
 
 
-
-val favouriteModule = module {
-    single { FavouriteRepository() }
-}
+val favouriteModules = module {
+    single { FavouriteRepository(get()) }
+} + dbModule

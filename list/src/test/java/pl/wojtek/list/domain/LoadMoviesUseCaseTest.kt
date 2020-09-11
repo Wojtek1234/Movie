@@ -19,6 +19,8 @@ import pl.wojtek.favourites.FavouriteRepository
 import pl.wojtek.list.data.network.Dates
 import pl.wojtek.list.data.network.NetworkMovie
 import pl.wojtek.list.data.network.NetworkMovieResponse
+import pl.wojtek.list.domain.load.LoadMoviesUseCase
+import pl.wojtek.list.domain.load.Mapper
 import pl.wojtek.list.ui.createMovie
 import pl.wojtek.list.ui.createRandomMovies
 import pl.wojtek.testutils.MainCoroutineScopeRule

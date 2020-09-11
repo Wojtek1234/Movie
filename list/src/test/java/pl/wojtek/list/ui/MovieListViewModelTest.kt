@@ -16,8 +16,9 @@ import org.junit.Test
 import pl.wojtek.core.CoroutineUtils
 import pl.wojtek.core.common.ConsumableValue
 import pl.wojtek.core.errors.ErrorWrapper
-import pl.wojtek.list.domain.LoadMoviesUseCase
 import pl.wojtek.list.domain.Movie
+import pl.wojtek.list.domain.favourite.ChangeFavouriteStatusUseCase
+import pl.wojtek.list.domain.load.LoadMoviesUseCase
 import pl.wojtek.testutils.MainCoroutineScopeRule
 import pl.wojtek.testutils.test
 import kotlin.random.Random
@@ -37,6 +38,7 @@ internal class MovieListViewModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var useCase: LoadMoviesUseCase
+    private lateinit var changeFavouriteUseCase: ChangeFavouriteStatusUseCase
 
     private lateinit var coroutineUtils: CoroutineUtils
     private val testDispatcher = TestCoroutineDispatcher()
@@ -54,7 +56,8 @@ internal class MovieListViewModelTest {
     @Before
     fun setUp() {
         useCase = mockk(relaxed = true)
-        coroutineUtils = mockk(relaxed = true)
+        coroutineUtils = mockk()
+        changeFavouriteUseCase = mockk(relaxed = true)
         coEvery { coroutineUtils.io } returns testDispatcher
         coEvery { useCase.loadedMovies() } returns moviesFlow
         coEvery { useCase.loading() } returns loadingFlow
@@ -76,8 +79,7 @@ internal class MovieListViewModelTest {
     }
 
     private fun createViewModel():MovieListViewModel {
-
-        val vm   = MovieListViewModel(useCase, coroutineUtils)
+        val vm = MovieListViewModel(useCase, changeFavouriteUseCase, coroutineUtils)
         testDispatcher.advanceTimeBy(500)
         return vm
     }
@@ -114,6 +116,7 @@ internal class MovieListViewModelTest {
             val testStream = viewModel.moviesStream.test()
             moviesChannel.send(listOfMovies)
             moviesChannel.send(tottalyDifferentListOfMovies)
+
             //then
             testStream
                 .assertValues(listOfMovies, tottalyDifferentListOfMovies)
@@ -125,11 +128,11 @@ internal class MovieListViewModelTest {
     fun `when ask for more from use case throws exception proper value appears on error stream`() {
         runBlockingTest {
             //given
-            val exceptionToThrow = NullPointerException("tralala")
-            coEvery { useCase.loadNextPage() } throws exceptionToThrow
-
+            val exceptionToThrow = Exception
             val producedErrorWrapper = ErrorWrapper("title", "text")
             coEvery { coroutineUtils.produce(exceptionToThrow) } returns producedErrorWrapper
+            coEvery { useCase.loadNextPage() } throws exceptionToThrow
+
 
             //when //then
             viewModel = createViewModel()
@@ -137,9 +140,10 @@ internal class MovieListViewModelTest {
                 .test()
                 .assertValues(ConsumableValue(producedErrorWrapper))
                 .finish()
-
         }
     }
+
+    object Exception : Throwable()
 
 
     @Test
@@ -147,8 +151,8 @@ internal class MovieListViewModelTest {
         runBlockingTest {
             //given
             viewModel = createViewModel()
-            //when
 
+            //when
             val testProgress = viewModel.showProgressStream.test().assertValues(false)
             loadingChannel.send(true)
 
@@ -157,6 +161,7 @@ internal class MovieListViewModelTest {
 
             //when
             loadingChannel.send(false)
+            //then
             testProgress.assertValueAt(2,false)
         }
     }
@@ -165,13 +170,27 @@ internal class MovieListViewModelTest {
     fun `when setting filter query trigger proper method of use case`() {
         runBlockingTest {
             //given
-            //given
             viewModel = createViewModel()
-            //when
 
+            //when
             viewModel.setFilterQuery("query")
+
             //then
             coVerify { useCase.setFilterQuery("query") }
+        }
+    }
+
+    @Test
+    fun `when changing status of favourite proper method of use case is triggered`() {
+        runBlockingTest {
+            //given
+            viewModel = createViewModel()
+
+            //when
+            viewModel.changeMovieFavouriteStatus(createMovie(123))
+
+            //then
+            coVerify { changeFavouriteUseCase.changeFavourite(123) }
         }
     }
 

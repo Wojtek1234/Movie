@@ -9,8 +9,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pl.wojtek.core.CoroutineUtils
 import pl.wojtek.core.base.BaseViewModel
-import pl.wojtek.list.domain.LoadMoviesUseCase
 import pl.wojtek.list.domain.Movie
+import pl.wojtek.list.domain.favourite.ChangeFavouriteStatusUseCase
+import pl.wojtek.list.domain.load.LoadMoviesUseCase
 
 /**
  *
@@ -19,6 +20,7 @@ import pl.wojtek.list.domain.Movie
 
 internal class MovieListViewModel(
     private val useCase: LoadMoviesUseCase,
+    private val changeFavouriteStatusUseCase: ChangeFavouriteStatusUseCase,
     coroutineUtils: CoroutineUtils
 ) : BaseViewModel(coroutineUtils) {
 
@@ -57,6 +59,12 @@ internal class MovieListViewModel(
     fun setFilterQuery(query: String) {
         viewModelScope.launch {
             useCase.setFilterQuery(query)
+        }
+    }
+
+    fun changeMovieFavouriteStatus(movie: Movie) {
+        viewModelScope.launch(errorHandler) {
+            changeFavouriteStatusUseCase.changeFavourite(movie.id)
         }
     }
 

@@ -43,5 +43,6 @@
             android:padding="@dimen/margin"
             android:layout_margin="@dimen/margin"
             android:src="@drawable/ic_outline_star_border_24"
+            app:tint="@color/yellow"
             />
 </androidx.constraintlayout.widget.ConstraintLayout>
