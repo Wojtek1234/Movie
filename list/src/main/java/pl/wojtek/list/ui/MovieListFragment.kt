@@ -2,6 +2,9 @@ package pl.wojtek.list.ui
 
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
@@ -19,8 +22,10 @@ import pl.wojtek.list.data.network.MoviesDataSource
 import pl.wojtek.list.data.network.MoviesNetworkDataMapper
 import pl.wojtek.list.domain.Movie
 import pl.wojtek.list.domain.favourite.ChangeFavouriteStatusUseCase
+import pl.wojtek.list.domain.filter.FilterMoviesUseCase
 import pl.wojtek.list.domain.load.LoadMoviesUseCase
 import pl.wojtek.list.domain.load.Mapper
+
 
 /**
  *
@@ -30,7 +35,11 @@ import pl.wojtek.list.domain.load.Mapper
 class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
 
     private val viewModel: MovieListViewModel by viewModel()
+    private val hintsViewModel: ProvideHintOptionsViewModel by viewModel()
     private val imageLoader: ImageLoader by inject()
+
+
+    private var clicked = false
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -45,7 +54,29 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
         }
 
         movieSearchEditText.doAfterTextChanged {
-            viewModel.setFilterQuery(it?.toString() ?: "")
+            val query = it?.toString() ?: ""
+            viewModel.setFilterQuery(query)
+            hintsViewModel.setQuery(query)
+        }
+        movieSearchEditText.threshold = 1
+
+        movieSearchEditText.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            clicked = true
+        }
+        movieSearchEditText.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                movieSearchEditText.dismissDropDown()
+            }
+            false
+        }
+
+        observe(hintsViewModel.queryHintsStream) {
+            movieSearchEditText.setAdapter(ArrayAdapter(requireContext(), android.R.layout.select_dialog_item, it))
+            if (movieSearchEditText.hasFocus() && movieSearchEditText.text.isNotBlank() && !clicked) {
+                movieSearchEditText.showDropDown()
+            } else {
+                clicked = false
+            }
         }
 
         moviesRecyclerView.adapter = listAdapter(R.layout.vh_movie_element,
@@ -79,4 +110,5 @@ internal val movieListModule = module {
         val paginModel = get<CoroutinePaginModelFactory>().createPaginModel(MoviesDataSource(getApi()), MoviesNetworkDataMapper())
         LoadMoviesUseCase(paginModel, get(), Mapper(get()))
     }
+    viewModel { ProvideHintOptionsViewModel(FilterMoviesUseCase(getApi()), get()) }
 }
