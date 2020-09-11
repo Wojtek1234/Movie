@@ -21,12 +21,12 @@ internal class LoadMovieDetailsUseCase(private val movieId: Int,
         val networkMovie = api.getMovieDetails(movieId)
         val photo = "${imageUrlProvider.provideFullSizeUrl()}${networkMovie.posterPath}"
         return MovieDetails(
-            networkMovie.title,
-            photo,
-            stringCreator.createDate(networkMovie.releaseDate),
-            networkMovie.overview,
-            networkMovie.voteAverage.toString(),
-            isFavourite
+            title = networkMovie.title,
+            imageUrl = photo,
+            date = stringCreator.createDate(networkMovie.releaseDate),
+            description = networkMovie.overview,
+            vote = networkMovie.voteAverage.toString(),
+            isFavourite = isFavourite
         )
     }
 

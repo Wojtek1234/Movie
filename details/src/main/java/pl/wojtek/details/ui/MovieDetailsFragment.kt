@@ -56,6 +56,10 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
             imageLoader.loadImageToImageView(it.imageUrl, moviePosterImageView) {
                 startPostponedEnterTransition()
             }
+            titleText.text = it.title
+            overviewText.text = it.description
+            dateText.text = it.date
+            voteText.text = it.vote
         }
 
         observe(viewModel.favouriteStream) {

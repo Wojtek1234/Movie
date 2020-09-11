@@ -6,4 +6,8 @@
     <string name="hint_search_movie">Search for movie</string>
     <string name="movie_details_argument" translatable="false">key_to_movie_details</string>
     <string name="movie_poster_key" translatable="false">movie_poster_transition_key</string>
+    <string name="movie_title_label">Movie title</string>
+    <string name="move_date_label">Date of release:</string>
+    <string name="move_overview_label">Overview</string>
+    <string name="move_vote_label">Vote average</string>
 </resources>
