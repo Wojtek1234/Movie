@@ -38,7 +38,7 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 
         postponeEnterTransition()
 
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(R.transition.change_image)
 
     }
 

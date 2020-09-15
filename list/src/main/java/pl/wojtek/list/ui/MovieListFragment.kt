@@ -6,7 +6,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.view.ViewCompat
-import androidx.core.view.doOnPreDraw
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -47,7 +46,7 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         postponeEnterTransition()
-        view.doOnPreDraw { startPostponedEnterTransition() }
+
         movieRefreshLayout.isEnabled = false
 
         observe(viewModel.showProgressStream) {
@@ -55,6 +54,7 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
         }
 
         observe(viewModel.errorWrapperStream) {
+            startPostponedEnterTransition()
             showSimpleErrorDialog(it)
         }
 
@@ -91,9 +91,10 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
 
         moviesRecyclerView.adapter = listAdapter(R.layout.vh_movie_element,
             itemCallback { areItemsTheSame { t1, t2 -> t1.id == t2.id } }) { _, movie: Movie ->
+            ViewCompat.setTransitionName(vhMovieImagePoster, "${getString(R.string.movie_poster_key)}${movie.id}")
             setOnClickListener {
                 lifecycleScope.launchWhenResumed {
-                    ViewCompat.setTransitionName(vhMovieImagePoster, "${getString(R.string.movie_poster_key)}${movie.id}")
+
                     navigator.openMovie(movie, vhMovieImagePoster)
                 }
             }
@@ -106,6 +107,12 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
             }
             vhMovieTitle.text = movie.title
         }.apply {
+
+            postponeEnterTransition()
+            moviesRecyclerView.viewTreeObserver.addOnPreDrawListener {
+                startPostponedEnterTransition()
+                true
+            }
             viewModel.moviesStream.value?.let {
                 submitList(it)
             }
