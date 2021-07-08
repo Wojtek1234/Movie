@@ -4,7 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.platform.app.InstrumentationRegistry
-import io.kotlintest.shouldBe
+import com.agronet.testutils.MainCoroutineScopeRule
+import com.agronet.testutils.test
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -12,9 +13,9 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import pl.wojtek.testutils.MainCoroutineScopeRule
-import pl.wojtek.testutils.test
+
 import java.io.IOException
+import kotlin.test.assertEquals
 
 /**
  *
@@ -67,7 +68,7 @@ internal class FavouriteDaoTest {
             favDao.insertFavourite(fav)
             delay(100)
             //then
-            testFlow.assertValueAt(1, listOf(fav))
+            testFlow.assertValuesAt(1, listOf(fav))
             testFlow.finish()
         }
     }
@@ -85,7 +86,7 @@ internal class FavouriteDaoTest {
             favDao.deleteFavourite(fav.id)
             delay(100)
             //then
-            testFlow.assertValueAt(2, emptyList())
+            testFlow.assertValuesAt(2, emptyList())
             testFlow.finish()
         }
     }
@@ -94,7 +95,7 @@ internal class FavouriteDaoTest {
     fun returnNullWhenThereIsNoFavouriteInDB() {
         runBlocking {
             //when then
-            favDao.getFavourite(id1) shouldBe null
+            assertEquals(favDao.getFavourite(id1), null)
         }
     }
 
@@ -108,7 +109,7 @@ internal class FavouriteDaoTest {
             val favFromDb = favDao.getFavourite(fav.id)
 
             //then
-            favFromDb shouldBe fav
+            assertEquals(favFromDb, fav)
         }
     }
 }

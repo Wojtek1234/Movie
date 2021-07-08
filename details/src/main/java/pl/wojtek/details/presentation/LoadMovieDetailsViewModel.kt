@@ -1,4 +1,4 @@
-package pl.wojtek.details.ui
+package pl.wojtek.details.presentation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

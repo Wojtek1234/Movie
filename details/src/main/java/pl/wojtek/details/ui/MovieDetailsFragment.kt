@@ -6,19 +6,17 @@ import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.transition.TransitionInflater
-import kotlinx.android.synthetic.main.fragment_movie_details.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
-import pl.wojtek.core.extensions.getApi
-import pl.wojtek.core.extensions.getFavouriteIcon
-import pl.wojtek.core.extensions.observe
-import pl.wojtek.core.extensions.showSimpleErrorDialog
+import pl.wojtek.core.extensions.*
 import pl.wojtek.core.image.ImageLoader
 import pl.wojtek.details.R
+import pl.wojtek.details.databinding.FragmentMovieDetailsBinding
 import pl.wojtek.details.domain.LoadMovieDetailsUseCase
+import pl.wojtek.details.presentation.LoadMovieDetailsViewModel
 
 /**
  *
@@ -32,7 +30,7 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
     private val viewModel: LoadMovieDetailsViewModel by viewModel { parametersOf(movieId) }
 
     private val imageLoader: ImageLoader by inject()
-
+    private val binding by viewBinding(FragmentMovieDetailsBinding::bind)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -45,7 +43,7 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ViewCompat.setTransitionName(moviePosterImageView, "${requireContext().getString(R.string.movie_poster_key)}$movieId")
+        ViewCompat.setTransitionName(binding.moviePosterImageView, "${requireContext().getString(R.string.movie_poster_key)}$movieId")
 
         observe(viewModel.errorWrapperStream) {
             startPostponedEnterTransition()
@@ -53,19 +51,19 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
         }
 
         observe(viewModel.movieDetailsStream) {
-            imageLoader.loadImageToImageView(it.imageUrl, moviePosterImageView) {
+            imageLoader.loadImageToImageView(it.imageUrl, binding.moviePosterImageView) {
                 startPostponedEnterTransition()
             }
-            titleText.text = it.title
-            overviewText.text = it.description
-            dateText.text = it.date
-            voteText.text = it.vote
+            binding.titleText.text = it.title
+            binding.overviewText.text = it.description
+            binding.dateText.text = it.date
+            binding.voteText.text = it.vote
         }
 
         observe(viewModel.favouriteStream) {
-            toolbarFavouriteIcon.setImageResource(getFavouriteIcon(it))
+            binding.toolbarFavouriteIcon.setImageResource(getFavouriteIcon(it))
         }
-        toolbarFavouriteIcon.setOnClickListener {
+        binding.toolbarFavouriteIcon.setOnClickListener {
             viewModel.changeFavourite()
         }
     }

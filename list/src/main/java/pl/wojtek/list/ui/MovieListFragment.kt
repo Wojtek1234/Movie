@@ -10,8 +10,6 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_movie_list.*
-import kotlinx.android.synthetic.main.vh_movie_element.view.*
 import mobi.wojtek.pagination.coroutine.CoroutinePaginModelFactory
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -23,11 +21,15 @@ import pl.wojtek.list.ListNavigation
 import pl.wojtek.list.R
 import pl.wojtek.list.data.network.MoviesDataSource
 import pl.wojtek.list.data.network.MoviesNetworkDataMapper
+import pl.wojtek.list.databinding.FragmentMovieListBinding
+import pl.wojtek.list.databinding.VhMovieElementBinding
 import pl.wojtek.list.domain.Movie
 import pl.wojtek.list.domain.favourite.ChangeFavouriteStatusUseCase
 import pl.wojtek.list.domain.filter.FilterMoviesUseCase
 import pl.wojtek.list.domain.load.LoadMoviesUseCase
 import pl.wojtek.list.domain.load.Mapper
+import pl.wojtek.list.presentation.MovieListViewModel
+import pl.wojtek.list.presentation.ProvideHintOptionsViewModel
 
 
 /**
@@ -41,16 +43,16 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
     private val hintsViewModel: ProvideHintOptionsViewModel by viewModel()
     private val imageLoader: ImageLoader by inject()
     private val navigator: ListNavigation by inject()
-
+    private val binding by viewBinding(FragmentMovieListBinding::bind)
     private var clicked = false
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         postponeEnterTransition()
 
-        movieRefreshLayout.isEnabled = false
+        binding.movieRefreshLayout.isEnabled = false
 
         observe(viewModel.showProgressStream) {
-            movieRefreshLayout.isRefreshing = it
+            binding.movieRefreshLayout.isRefreshing = it
         }
 
         observe(viewModel.errorWrapperStream) {
@@ -58,27 +60,27 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
             showSimpleErrorDialog(it)
         }
 
-        movieSearchEditText.doAfterTextChanged {
+        binding.movieSearchEditText.doAfterTextChanged {
             val query = it?.toString() ?: ""
             viewModel.setFilterQuery(query)
             hintsViewModel.setQuery(query)
         }
-        movieSearchEditText.threshold = 1
+        binding.movieSearchEditText.threshold = 1
 
-        movieSearchEditText.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+        binding.movieSearchEditText.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             clicked = true
         }
-        movieSearchEditText.setOnEditorActionListener { v, actionId, event ->
+        binding.movieSearchEditText.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                movieSearchEditText.dismissDropDown()
+                binding.movieSearchEditText.dismissDropDown()
             }
             false
         }
 
         observe(hintsViewModel.queryHintsStream) {
-            movieSearchEditText.setAdapter(ArrayAdapter(requireContext(), android.R.layout.select_dialog_item, it))
-            if (movieSearchEditText.hasFocus() && movieSearchEditText.text.isNotBlank() && !clicked) {
-                movieSearchEditText.showDropDown()
+            binding.movieSearchEditText.setAdapter(ArrayAdapter(requireContext(), android.R.layout.select_dialog_item, it))
+            if (binding.movieSearchEditText.hasFocus() && binding.movieSearchEditText.text.isNotBlank() && !clicked) {
+                binding.movieSearchEditText.showDropDown()
             } else {
                 clicked = false
             }
@@ -89,27 +91,31 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
 
     private fun handleRecyclerView() {
 
-        moviesRecyclerView.adapter = listAdapter(R.layout.vh_movie_element,
+        binding.moviesRecyclerView.adapter = listAdapter(R.layout.vh_movie_element,
             itemCallback { areItemsTheSame { t1, t2 -> t1.id == t2.id } }) { _, movie: Movie ->
-            ViewCompat.setTransitionName(vhMovieImagePoster, "${getString(R.string.movie_poster_key)}${movie.id}")
-            setOnClickListener {
-                lifecycleScope.launchWhenResumed {
+            with(VhMovieElementBinding.bind(this)) {
 
-                    navigator.openMovie(movie, vhMovieImagePoster)
+
+                ViewCompat.setTransitionName(vhMovieImagePoster, "${getString(R.string.movie_poster_key)}${movie.id}")
+                setOnClickListener {
+                    lifecycleScope.launchWhenResumed {
+
+                        navigator.openMovie(movie, vhMovieImagePoster)
+                    }
                 }
+                imageLoader.loadImageToImageView(movie.imageUrl, vhMovieImagePoster)
+                vhMovieLoveIcon.setImageResource(
+                    getFavouriteIcon(movie.isLoved)
+                )
+                vhMovieLoveIcon.setOnClickListener {
+                    viewModel.changeMovieFavouriteStatus(movie)
+                }
+                vhMovieTitle.text = movie.title
             }
-            imageLoader.loadImageToImageView(movie.imageUrl, vhMovieImagePoster)
-            vhMovieLoveIcon.setImageResource(
-                getFavouriteIcon(movie.isLoved)
-            )
-            vhMovieLoveIcon.setOnClickListener {
-                viewModel.changeMovieFavouriteStatus(movie)
-            }
-            vhMovieTitle.text = movie.title
         }.apply {
 
             postponeEnterTransition()
-            moviesRecyclerView.viewTreeObserver.addOnPreDrawListener {
+            binding.moviesRecyclerView.viewTreeObserver.addOnPreDrawListener {
                 startPostponedEnterTransition()
                 true
             }
@@ -117,12 +123,12 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
                 submitList(it)
             }
             observe(viewModel.moviesStream) {
-                moviesRecyclerView.scheduleAnimationIfEmptyAdapter()
+                binding.moviesRecyclerView.scheduleAnimationIfEmptyAdapter()
                 submitList(it)
             }
         }
 
-        moviesRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.moviesRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {

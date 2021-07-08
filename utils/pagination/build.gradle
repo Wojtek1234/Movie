@@ -1,14 +1,14 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    buildToolsVersion "30.0.3"
 
 
     defaultConfig {
         minSdkVersion min_sdk_version
-        targetSdkVersion 29
+        targetSdkVersion compile_sdk_version
         versionCode 1
         versionName "1.0"
 
@@ -48,5 +48,7 @@ dependencies {
     implementation mvvms
     testImplementation unit_tests
     testImplementation corouines_test
+    testRuntimeOnly runtimeJunit5
+    testImplementation project(path: ':utils:testutils')
 
 }

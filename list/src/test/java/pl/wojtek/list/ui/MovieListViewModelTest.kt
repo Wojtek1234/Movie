@@ -1,6 +1,6 @@
 package pl.wojtek.list.ui
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.agronet.testutils.test
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifySequence
@@ -10,17 +10,19 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.api.extension.RegisterExtension
 import pl.wojtek.core.CoroutineUtils
 import pl.wojtek.core.common.ConsumableValue
 import pl.wojtek.core.errors.ErrorWrapper
 import pl.wojtek.list.domain.Movie
 import pl.wojtek.list.domain.favourite.ChangeFavouriteStatusUseCase
 import pl.wojtek.list.domain.load.LoadMoviesUseCase
-import pl.wojtek.testutils.MainCoroutineScopeRule
-import pl.wojtek.testutils.test
+import pl.wojtek.list.presentation.MovieListViewModel
+import pl.wojtek.testutils.CoroutinesTestExtension
+import pl.wojtek.testutils.InstantExecutorExtension
 import kotlin.random.Random
 
 /**
@@ -30,12 +32,12 @@ internal fun createRandomMovies()=  (0..Random.nextInt(20)).map { createMovie(it
 
 internal fun createMovie(it: Int) = Movie("title$it", "image$it", it % 2 == 0, it)
 
+@ExtendWith(InstantExecutorExtension::class)
 internal class MovieListViewModelTest {
 
-    @get:Rule
-    val coroutineScope = MainCoroutineScopeRule()
-    @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
+    @JvmField
+    @RegisterExtension
+    val coroutineScope = CoroutinesTestExtension()
 
     private lateinit var useCase: LoadMoviesUseCase
     private lateinit var changeFavouriteUseCase: ChangeFavouriteStatusUseCase
@@ -53,7 +55,7 @@ internal class MovieListViewModelTest {
     private val loadingChannel = BroadcastChannel<Boolean>(1)
     private val loadingFlow: Flow<Boolean> get() = loadingChannel.asFlow()
 
-    @Before
+    @BeforeEach
     fun setUp() {
         useCase = mockk(relaxed = true)
         coroutineUtils = mockk()
@@ -78,7 +80,7 @@ internal class MovieListViewModelTest {
         }
     }
 
-    private fun createViewModel():MovieListViewModel {
+    private fun createViewModel(): MovieListViewModel {
         val vm = MovieListViewModel(useCase, changeFavouriteUseCase, coroutineUtils)
         testDispatcher.advanceTimeBy(500)
         return vm
@@ -157,12 +159,12 @@ internal class MovieListViewModelTest {
             loadingChannel.send(true)
 
             //then
-            testProgress.assertValueAt(1,true)
+            testProgress.assertValuesAt(1, true)
 
             //when
             loadingChannel.send(false)
             //then
-            testProgress.assertValueAt(2,false)
+            testProgress.assertValuesAt(2, false)
         }
     }
 

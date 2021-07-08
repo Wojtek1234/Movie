@@ -1,19 +1,19 @@
 package pl.wojtek.list.domain
 
-import io.kotlintest.shouldBe
+import com.agronet.testutils.test
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runBlockingTest
 import mobi.wojtek.pagination.coroutine.CoroutinePaginModel
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+
+import org.junit.jupiter.api.extension.RegisterExtension
 import pl.wojtek.favourites.FavouriteMovie
 import pl.wojtek.favourites.FavouriteRepository
 import pl.wojtek.list.data.network.Dates
@@ -23,16 +23,17 @@ import pl.wojtek.list.domain.load.LoadMoviesUseCase
 import pl.wojtek.list.domain.load.Mapper
 import pl.wojtek.list.ui.createMovie
 import pl.wojtek.list.ui.createRandomMovies
-import pl.wojtek.testutils.MainCoroutineScopeRule
-import pl.wojtek.testutils.test
+import pl.wojtek.testutils.CoroutinesTestExtension
+import kotlin.test.assertEquals
+
 
 /**
  *
  */
-@ExperimentalCoroutinesApi
 internal class LoadMoviesUseCaseTest {
-    @get:Rule
-    val coroutineScope = MainCoroutineScopeRule()
+    @JvmField
+    @RegisterExtension
+    val coroutineScope = CoroutinesTestExtension()
 
     lateinit var paginModel: CoroutinePaginModel<Unit, NetworkMovie, NetworkMovieResponse>
     lateinit var favouriteRepository: FavouriteRepository
@@ -43,7 +44,7 @@ internal class LoadMoviesUseCaseTest {
     private val favouritesChannel = BroadcastChannel<List<FavouriteMovie>>(1)
     val favouritesFlow: Flow<List<FavouriteMovie>> get() = favouritesChannel.asFlow()
 
-    @Before
+    @BeforeEach
     fun setup() {
         paginModel = mockk(relaxed = true)
         favouriteRepository = mockk(relaxed = true)
@@ -76,7 +77,7 @@ internal class LoadMoviesUseCaseTest {
             val testFlow = useCase.loading()
 
             //then
-            testFlow shouldBe someFlow
+            assertEquals(testFlow, someFlow)
         }
     }
 
@@ -147,25 +148,25 @@ internal class LoadMoviesUseCaseTest {
             useCase.setFilterQuery("11")
             coroutineScope.dispatcher.advanceTimeBy(10)
             //then
-            testFlow.assertValueAt(1,mappedMovies)
+            testFlow.assertValuesAt(1, mappedMovies)
 
             //when
             useCase.setFilterQuery("115")
             coroutineScope.dispatcher.advanceTimeBy(10)
             //then
-            testFlow.assertValueAt(2, listOf(mappedMovies[1],mappedMovies[2]))
+            testFlow.assertValuesAt(2, listOf(mappedMovies[1], mappedMovies[2]))
 
             //when
             useCase.setFilterQuery("11512")
             coroutineScope.dispatcher.advanceTimeBy(10)
             //then
-            testFlow.assertValueAt(3, listOf(mappedMovies[2]))
+            testFlow.assertValuesAt(3, listOf(mappedMovies[2]))
 
             //when
             useCase.setFilterQuery("")
             coroutineScope.dispatcher.advanceTimeBy(10)
             //then
-            testFlow.assertValueAt(4, mappedMovies)
+            testFlow.assertValuesAt(4, mappedMovies)
         }
     }
 }

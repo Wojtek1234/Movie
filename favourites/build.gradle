@@ -1,11 +1,11 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion compile_sdk_version
-    buildToolsVersion "29.0.3"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion min_sdk_version
@@ -59,13 +59,13 @@ dependencies {
     //test
 
     androidTestImplementation android_integration_test
-    androidTestImplementation unit_tests4
+    androidTestImplementation kotlin_junit
+    androidTestImplementation mock_android
     androidTestImplementation corouines_test
     androidTestImplementation project(":utils:testutils")
 
-    testImplementation android_integration_test
-    testImplementation unit_tests4
-    testImplementation corouines_test
-    testImplementation project(":utils:testutils")
+
+
+
 
 }

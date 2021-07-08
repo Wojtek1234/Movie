@@ -1,12 +1,13 @@
-package pl.wojtek.testutils
+package com.agronet.testutils
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.junit.Assert
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import kotlin.test.assertTrue
 
 /**
  *
@@ -36,9 +37,23 @@ class TestObserver<T>(
         return this
     }
 
-    fun assertValueAt(position: Int, value: T): TestObserver<T> {
+    fun assertValuesAt(position: Int, value: T): TestObserver<T> {
         assertEquals(values[position], value)
         return this
+    }
+
+    fun assertValuesAt(position: Int, matcher: (T) -> Boolean): TestObserver<T> {
+        assertTrue { matcher(values[position]) }
+        return this
+    }
+
+    fun assertSize(size: Int): TestObserver<T> {
+        assertEquals(values.size, size)
+        return this
+    }
+
+    fun isFinished() {
+        assertFalse(job.isActive)
     }
 
     fun finish() {

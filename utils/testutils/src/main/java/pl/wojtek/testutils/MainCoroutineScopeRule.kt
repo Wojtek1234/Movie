@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pl.wojtek.testutils
+package com.agronet.testutils
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

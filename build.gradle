@@ -1,54 +1,51 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.4.10'
+    ext.kotlin_version = '1.5.20'
 
     ext {
 
         // global variables
-        compile_sdk_version = 29
-        min_sdk_version = 19
-        core_ktx = '1.3.1'
+        compile_sdk_version = 30
+        min_sdk_version = 21
+        core_ktx = '1.6.0'
 
         androidx_compat = '1.2.0'
-        constrain_version = '2.0.0-beta4'
+        androidx_fragment = '1.3.2'
+        constrain_version = '2.1.0-beta01'
         swiperefresh = '1.1.0'
-        recyclerview_ver = '1.2.0-alpha05'
+        recyclerview_ver = '1.2.1'
 
         kotlin_std = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
         app_compat = "androidx.appcompat:appcompat:$androidx_compat"
+        fragmentx = "androidx.fragment:fragment-ktx:$androidx_fragment"
         kotlin_core_ktx = "androidx.core:core-ktx:$core_ktx"
-        def refreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:$swiperefresh"
-        recyclerview = "androidx.recyclerview:recyclerview:$recyclerview_ver"
+        refreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:$swiperefresh"
         constrain = "androidx.constraintlayout:constraintlayout:$constrain_version"
-        google_component = 'com.google.android.material:material:1.2.1'
+        fab = 'com.google.android.material:material:1.3.0'
+        google_component = fab
+        recyclerview = "androidx.recyclerview:recyclerview:$recyclerview_ver"
         card_view = "androidx.cardview:cardview:1.0.0"
+        flexboxlayout = 'com.google.android:flexbox:2.0.1'
         view_pager = "androidx.viewpager2:viewpager2:1.1.0-alpha01"
         dots_indicator = 'com.tbuonomo.andrui:viewpagerdotsindicator:4.1.2'
-        flexboxlayout = 'com.google.android:flexbox:2.0.1'
-        notification_media = "androidx.media:media:1.1.0"
+        notification_media = "androidx.media:media:1.3.0"
         //koin
-        koin_version = '2.1.5'
-        koin = "org.koin:koin-android:$koin_version"
-        def koin_viewmodel = "org.koin:koin-androidx-viewmodel:$koin_version"
-        def koin_scope = "org.koin:koin-androidx-scope:$koin_version"
-
-        //rxjava
-        rxkotlin_version = '2.4.0'
-        rx_kotlin = "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
-        rx_android = "io.reactivex.rxjava2:rxandroid:2.1.1"
+        koin_version = '3.1.1'
+        koin = "io.insert-koin:koin-android:$koin_version"
+        def koin_viewmodel = "io.insert-koin:koin-android:$koin_version"
 
         //mvvm
-        lifecycle = '2.2.0'
-        def livedata_version = '2.3.0-alpha06'
+        lifecycle = '2.3.1'
+        def livedata_version = '2.3.1'
         def view_model = "androidx.lifecycle:lifecycle-viewmodel:$lifecycle"
-        def view_model_ext = "androidx.lifecycle:lifecycle-extensions:$lifecycle"
         view_model_live_data = "androidx.lifecycle:lifecycle-livedata-ktx:$livedata_version"
-        lifecycle_runtime= "androidx.lifecycle:lifecycle-runtime-ktx:$livedata_version"
+        lifecycle_runtime = "androidx.lifecycle:lifecycle-runtime-ktx:$livedata_version"
+        lifecycle_java8 = "androidx.lifecycle:lifecycle-common-java8:$livedata_version"
         def view_model_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle"
 
         //navigation
-        nav_version = "2.3.0"
+        nav_version = "2.3.5"
         def navigation = "androidx.navigation:navigation-fragment-ktx:$nav_version"
         def ui_navigation = "androidx.navigation:navigation-ui-ktx:$nav_version"
 
@@ -58,48 +55,48 @@ buildscript {
 
         gson = "com.squareup.retrofit2:converter-gson:$retrofit_gson_version"
         retrofit = "com.squareup.retrofit2:retrofit:$retrofit_version"
-        scalar =  "com.squareup.retrofit2:converter-scalars:$retrofit_version"
-        loggingInter = 'com.squareup.okhttp3:logging-interceptor:4.7.2'
+        scalar = "com.squareup.retrofit2:converter-scalars:$retrofit_version"
+        loggingInter = 'com.squareup.okhttp3:logging-interceptor:4.9.1'
 
-        def ok_http = 'com.squareup.okhttp3:okhttp:4.7.2'
 
         //unit tests
-        kotlin_test_ver = '3.4.2'
-        def mockito_kotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
-        def kotlin_junit = "org.jetbrains.kotlin:kotlin-test-junit:${kotlin_version}"
-        def kotlin_test = "io.kotlintest:kotlintest-runner-junit5:$kotlin_test_ver"
-        def kotlin_test4 = "io.kotlintest:kotlintest-runner-junit4:$kotlin_test_ver"
+        kotlin_test_ver = '4.6.0'
+        kotlin_junit = "org.jetbrains.kotlin:kotlin-test-junit:${kotlin_version}"
+        runtimeJunit5 = 'org.junit.jupiter:junit-jupiter-engine:5.7.1'
+        junit5 = 'org.junit.jupiter:junit-jupiter-api:5.7.1'
         atchitcture_component_test = "androidx.arch.core:core-testing:2.1.0"
 
         //android testing
-        def testRunnerVersion = "1.2.0"
+        def testRunnerVersion = '1.4.0'
         def test_runner = "androidx.test:runner:$testRunnerVersion"
         def test_rules = "androidx.test:rules:$testRunnerVersion"
+        def test_core = "androidx.test:core-ktx:$testRunnerVersion"
+        def fragment_testing = "androidx.fragment:fragment-testing:1.3.2"
 
 
         //coroutines
-        def coroutines_android_version = '1.3.9'
+        def coroutines_android_version = '1.5.0-RC'
         coroutines_core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_android_version"
         coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${coroutines_android_version}"
 
         corouines_test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_android_version"
         standards = [
-                kotlin_std, app_compat, kotlin_core_ktx, refreshlayout, recyclerview, 'com.google.android.material:material:1.3.0-alpha02'
+                kotlin_std, app_compat, kotlin_core_ktx, refreshlayout, recyclerview, google_component
         ]
 
         mvvms = [
-                view_model, view_model_ext, view_model_live_data, view_model_ktx,lifecycle_runtime
+                view_model, view_model_live_data, view_model_ktx, lifecycle_runtime, lifecycle_java8
         ]
 
         depedency_injection = [
                 koin
         ]
         depedency_injections = [
-                koin, koin_viewmodel, koin_scope
+                koin, koin_viewmodel
         ]
 
         networking = [
-                retrofit, gson, loggingInter,scalar,'org.conscrypt:conscrypt-android:2.2.1'
+                retrofit, gson, loggingInter, scalar
         ]
 
 
@@ -111,28 +108,31 @@ buildscript {
                 coroutines_core, coroutines_android
         ]
         android_integration_test = [
-                test_runner, test_rules
+                kotlin_junit,test_runner, test_rules, test_core, fragment_testing
         ]
 
         //UI testing
-        espresso =  'androidx.test.espresso:espresso-core:3.2.0'
-        kakao =  'com.agoda.kakao:kakao:2.1.0'
-        mock_android =  'io.mockk:mockk-android:1.10.0'
+        espresso = 'androidx.test.espresso:espresso-core:3.3.0'
+        espresso_contrib = 'androidx.test.espresso:espresso-contrib:3.3.0'
+        kakao = 'com.agoda.kakao:kakao:2.4.0'
+        mock_android = 'io.mockk:mockk-android:1.11.0'
+        mock = 'io.mockk:mockk:1.11.0'
+
         unit_tests = [
-                kotlin_junit, kotlin_test,mock_android
+                kotlin_junit, mock, junit5
         ]
         unit_tests4 = [
-                kotlin_junit, kotlin_test4,mock_android
+                kotlin_junit, mock
         ]
         android_ui_testing = [
-                espresso,kakao,mock_android
+                espresso, kakao, mock_android
         ]
         view_pagers = [
                 view_pager, dots_indicator
         ]
 
         //room
-        def room_version = '2.2.5'
+        def room_version = '2.3.0'
         def room = "androidx.room:room-ktx:$room_version"
         room_kapt = "androidx.room:room-compiler:$room_version"
         database = [
@@ -142,7 +142,17 @@ buildscript {
                 room_kapt
         ]
 
+        ///firebase
+        analitics = 'com.google.firebase:firebase-analytics-ktx:18.0.3'
+        crashlitics = 'com.google.firebase:firebase-crashlytics:18.1.0'
+        dynamicLinks = 'com.google.firebase:firebase-dynamic-links-ktx:19.1.1'
 
+        fcm = 'com.google.firebase:firebase-messaging:21.1.0'
+        def location = "com.google.android.gms:play-services-location:17.0.0"
+        auth = 'com.google.android.gms:play-services-auth:19.0.0'
+        firebase = [
+                analitics, crashlitics, dynamicLinks
+        ]
 
         picasso = 'com.squareup.picasso:picasso:2.71828'
 
@@ -154,10 +164,10 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath 'com.android.tools.build:gradle:4.2.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.google.gms:google-services:4.3.3'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.2.1'
+        classpath 'com.google.gms:google-services:4.3.8'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
     }
 }
 

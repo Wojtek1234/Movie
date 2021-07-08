@@ -1,9 +1,8 @@
 package pl.wojtek.list.domain.load
 
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import mobi.wojtek.pagination.coroutine.CoroutinePaginModel
@@ -23,33 +22,33 @@ internal class LoadMoviesUseCase(
     private val favouriteRepository: FavouriteRepository,
     private val mapper: Mapper
 ) {
-    private val queryChannel = ConflatedBroadcastChannel<String>("")
-    private val loadMoviesChannel = BroadcastChannel<List<NetworkMovie>>(1)
+    private val queryChannel = MutableStateFlow<String>("")
+    private val loadMoviesChannel = MutableSharedFlow<List<NetworkMovie>>(1)
 
     private val scope by BoundCoroutineScopeDelegate()
 
     init {
-        scope.launch{
+        scope.launch {
             paginModel.setQuery(Unit)
         }
     }
 
     private val loadMoviesFlow: Flow<List<Movie>>
-        get() = loadMoviesChannel.asFlow()
+        get() = loadMoviesChannel
             .combine(favouriteRepository.loadFavourites())
             { results, favourites ->
                 mapper.map(results, favourites)
             }
-            .combine(queryChannel.asFlow())
+            .combine(queryChannel)
             { movies, query ->
                 if (query.isBlank()) movies
                 else
-                    movies.filter { it.title.toLowerCase().contains(query.toLowerCase()) }
+                    movies.filter { it.title.lowercase().contains(query.lowercase()) }
             }
 
     suspend fun loadNextPage() {
         paginModel.askForMore()?.let {
-            loadMoviesChannel.send(it)
+            loadMoviesChannel.emit(it)
         }
     }
 
@@ -57,12 +56,10 @@ internal class LoadMoviesUseCase(
     fun loading(): Flow<Boolean> = paginModel.loadingState()
 
     suspend fun setFilterQuery(query: String) {
-        queryChannel.send(query)
+        queryChannel.emit(query)
     }
 
     fun clear() {
-        queryChannel.cancel()
         paginModel.clear()
-        loadMoviesChannel.cancel()
     }
 }

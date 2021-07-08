@@ -1,10 +1,10 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 
 android {
     compileSdkVersion compile_sdk_version
-    buildToolsVersion "29.0.3"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion min_sdk_version
@@ -31,15 +31,26 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+    buildFeatures {
+        viewBinding true
+    }
 
-
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE.md'
+        exclude 'META-INF/LGPL2.1'
+        exclude 'META-INF/AL2.0'
+        exclude 'META-INF/LICENSE-notice.md'
+        exclude 'META-INF/*.kotlin_module'
+    }
 }
 
 dependencies {
     implementation lifecycle_runtime
     implementation view_model_live_data
     implementation kotlin_std
-    implementation unit_tests4
+    implementation kotlin_junit
+    implementation junit5
     implementation coroutines
     implementation corouines_test
 }

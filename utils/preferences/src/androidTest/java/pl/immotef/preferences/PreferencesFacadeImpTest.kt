@@ -4,17 +4,17 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-import io.kotlintest.shouldBe
+import com.agronet.testutils.MainCoroutineScopeRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import pl.wojtek.preferences.PreferencesFacade
-import pl.wojtek.preferences.PreferencesFacadeImp
-import pl.wojtek.testutils.MainCoroutineScopeRule
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import pl.wojtek.preferences.PreferencesFacade
+import pl.wojtek.preferences.PreferencesFacadeImp
+import kotlin.test.assertEquals
 
 
 /**
@@ -62,7 +62,7 @@ class PreferencesFacadeImpTest {
             preferencesFacade.saveString(someFancyString, someFancyKey)
 
             //then
-            preferences.getString(someFancyKey,"some tottaly different value") shouldBe someFancyString
+            assertEquals(preferences.getString(someFancyKey, "some tottaly different value"), someFancyString)
         }
     }
 
@@ -79,7 +79,7 @@ class PreferencesFacadeImpTest {
 
 
             //then
-            preferencesFacade.retrieveString(someFancyKey) shouldBe someFancyString
+            assertEquals(preferencesFacade.retrieveString(someFancyKey), someFancyString)
         }
     }
 
@@ -96,7 +96,7 @@ class PreferencesFacadeImpTest {
             preferencesFacade.saveInt(someFancyInt, someFancyKey)
 
             //then
-            preferences.getInt(someFancyKey,-123) shouldBe someFancyInt
+            assertEquals(preferences.getInt(someFancyKey, -123), someFancyInt)
         }
     }
 
@@ -113,7 +113,7 @@ class PreferencesFacadeImpTest {
 
 
             //then
-            preferencesFacade.retrieveInt(someFancyKey) shouldBe someFancyInt
+            assertEquals(preferencesFacade.retrieveInt(someFancyKey), someFancyInt)
         }
     }
 }

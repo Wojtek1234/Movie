@@ -6,8 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.flow.collect
 import org.koin.android.ext.android.inject
 import pl.wojtek.list.ListNavigationListener
@@ -15,7 +15,7 @@ import pl.wojtek.list.ListNavigationListener
 class MainActivity : AppCompatActivity() {
 
     private val listNavigationListener: ListNavigationListener by inject()
-    private val navController by lazy { navHostFragment.findNavController() }
+    private val navController by lazy { (supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment).findNavController() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
