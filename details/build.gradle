@@ -52,9 +52,11 @@ dependencies {
     kapt moshi_kapt
 
 
+
     //test
-    testImplementation unit_tests4
+    testImplementation unit_tests
     testImplementation corouines_test
+    testRuntimeOnly runtimeJunit5
     testImplementation atchitcture_component_test
     testImplementation project(":utils:testutils")
 }

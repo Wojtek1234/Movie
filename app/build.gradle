@@ -52,6 +52,14 @@ dependencies {
     implementation constrain
     implementation coroutines
     implementation depedency_injections
-    implementation 'com.android.support:multidex:1.0.3'
+
+
+
+    //test
+    testImplementation unit_tests
+    testImplementation corouines_test
+    testRuntimeOnly runtimeJunit5
+    testImplementation atchitcture_component_test
+    testImplementation project(":utils:testutils")
 
 }

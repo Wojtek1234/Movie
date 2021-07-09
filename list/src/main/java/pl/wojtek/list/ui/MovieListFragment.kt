@@ -5,11 +5,15 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageView
+import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.transition.MaterialElevationScale
+import com.google.android.material.transition.MaterialFadeThrough
 import mobi.wojtek.pagination.coroutine.CoroutinePaginModelFactory
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -17,7 +21,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.dsl.module
 import pl.wojtek.core.extensions.*
 import pl.wojtek.core.image.ImageLoader
-import pl.wojtek.list.ListNavigation
 import pl.wojtek.list.R
 import pl.wojtek.list.data.network.MoviesDataSource
 import pl.wojtek.list.data.network.MoviesNetworkDataMapper
@@ -28,6 +31,7 @@ import pl.wojtek.list.domain.favourite.ChangeFavouriteStatusUseCase
 import pl.wojtek.list.domain.filter.FilterMoviesUseCase
 import pl.wojtek.list.domain.load.LoadMoviesUseCase
 import pl.wojtek.list.domain.load.Mapper
+import pl.wojtek.list.presentation.MoveToDetailsViewModel
 import pl.wojtek.list.presentation.MovieListViewModel
 import pl.wojtek.list.presentation.ProvideHintOptionsViewModel
 
@@ -41,10 +45,20 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
 
     private val viewModel: MovieListViewModel by viewModel()
     private val hintsViewModel: ProvideHintOptionsViewModel by viewModel()
+    private val moveToDetailsViewModel: MoveToDetailsViewModel by viewModel()
     private val imageLoader: ImageLoader by inject()
-    private val navigator: ListNavigation by inject()
+
     private val binding by viewBinding(FragmentMovieListBinding::bind)
+
     private var clicked = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enterTransition = MaterialFadeThrough().apply {
+            duration = resources.getInteger(R.integer.reply_motion_duration_large).toLong()
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         postponeEnterTransition()
@@ -98,10 +112,7 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
 
                 ViewCompat.setTransitionName(vhMovieImagePoster, "${getString(R.string.movie_poster_key)}${movie.id}")
                 setOnClickListener {
-                    lifecycleScope.launchWhenResumed {
-
-                        navigator.openMovie(movie, vhMovieImagePoster)
-                    }
+                    navigateToDetails(movie, vhMovieImagePoster)
                 }
                 imageLoader.loadImageToImageView(movie.imageUrl, vhMovieImagePoster)
                 vhMovieLoveIcon.setImageResource(
@@ -137,6 +148,22 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
             }
         })
     }
+
+    private fun navigateToDetails(movie: Movie,
+                                  vhMovieImagePoster: ImageView) {
+        exitTransition = MaterialElevationScale(false).apply {
+            duration = resources.getInteger(R.integer.reply_motion_duration_large).toLong()
+        }
+        reenterTransition = MaterialElevationScale(true).apply {
+            duration = resources.getInteger(R.integer.reply_motion_duration_large).toLong()
+        }
+        lifecycleScope.launchWhenResumed {
+            moveToDetailsViewModel.moveToDetails(
+                bundleOf(getString(R.string.movie_details_argument) to movie.id),
+                vhMovieImagePoster
+            )
+        }
+    }
 }
 
 internal val movieListModule = module {
@@ -146,4 +173,5 @@ internal val movieListModule = module {
         LoadMoviesUseCase(paginModel, get(), Mapper(get()))
     }
     viewModel { ProvideHintOptionsViewModel(FilterMoviesUseCase(getApi()), get()) }
+    viewModel { MoveToDetailsViewModel(get(), get()) }
 }

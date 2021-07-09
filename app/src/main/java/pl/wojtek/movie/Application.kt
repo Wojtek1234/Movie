@@ -13,6 +13,7 @@ import pl.wojtek.favourites.favouriteModules
 import pl.wojtek.list.moviesModules
 import pl.wojtek.movie.BuildConfig.API_KEY
 import pl.wojtek.movie.BuildConfig.API_URL
+import pl.wojtek.movie.navigation.navigationDi
 import pl.wojtek.network.networkingModule
 
 /**
@@ -35,7 +36,7 @@ class Application : Application() {
                     appModule(), networkingModule(apiUrl, apiKey, BuildConfig.DEBUG), coroutinePaginationModule, detailsModule
 
                 )
-                        + coreModules + moviesModules + favouriteModules
+                        + coreModules + moviesModules + favouriteModules + navigationDi
             )
         }
     }

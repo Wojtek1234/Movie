@@ -2,4 +2,5 @@
 <resources>
     <integer name="anim_duration_medium">300</integer>
     <integer name="anim_duration_transition">300</integer>
+    <integer name="reply_motion_duration_large">300</integer>
 </resources>

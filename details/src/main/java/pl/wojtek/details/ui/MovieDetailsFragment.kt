@@ -1,11 +1,12 @@
 package pl.wojtek.details.ui
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
-import androidx.transition.TransitionInflater
+import com.google.android.material.transition.MaterialContainerTransform
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -33,11 +34,11 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
     private val binding by viewBinding(FragmentMovieDetailsBinding::bind)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         postponeEnterTransition()
-
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(R.transition.change_image)
-
+        sharedElementEnterTransition = MaterialContainerTransform().apply {
+            duration = resources.getInteger(R.integer.reply_motion_duration_large).toLong()
+            scrimColor = Color.TRANSPARENT
+        }
     }
 
 

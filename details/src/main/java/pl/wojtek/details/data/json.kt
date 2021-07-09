@@ -14,7 +14,7 @@ data class MovieDetailsNetworkResponse(
     @Json(name = "adult")
     val adult: Boolean,
     @Json(name = "backdrop_path")
-    val backdropPath: String,
+    val backdropPath: String?,
     @Json(name = "belongs_to_collection")
     val belongsToCollection: Any?,
     @Json(name = "budget")
