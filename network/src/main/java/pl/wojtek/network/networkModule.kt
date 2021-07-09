@@ -1,12 +1,12 @@
-package mobi.szkolniak.network
+package pl.wojtek.network
 
-import com.google.gson.GsonBuilder
+import com.squareup.moshi.Moshi
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 
@@ -52,11 +52,10 @@ fun networkingModule(url: String, apiKey: String, isDebug: Boolean) = module {
     }
 
     single {
-        GsonConverterFactory.create(
-            GsonBuilder()
-                .setDateFormat("yyyy-MM-dd")
-                .setLenient()
-                .create()
+        MoshiConverterFactory.create(
+            Moshi.Builder()
+                .add(MoshiDateDeserializer(listOfFormats))
+                .build()
         )
     }
 
@@ -65,14 +64,14 @@ fun networkingModule(url: String, apiKey: String, isDebug: Boolean) = module {
             .baseUrl(url)
             .client(get())
             .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(get<GsonConverterFactory>())
+            .addConverterFactory(get<MoshiConverterFactory>())
             .build()
     }
 
 
-
-
 }
+
+val listOfFormats = listOf("yyyy-MM-dd")
 
 
 

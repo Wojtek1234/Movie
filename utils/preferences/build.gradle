@@ -47,7 +47,6 @@ dependencies {
 
     implementation kotlin_std
     implementation depedency_injection
-    implementation gson
     //test
 
     androidTestImplementation android_integration_test

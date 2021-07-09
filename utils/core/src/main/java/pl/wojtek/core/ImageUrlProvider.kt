@@ -1,6 +1,7 @@
 package pl.wojtek.core
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import retrofit2.http.GET
 
 
@@ -57,27 +58,28 @@ class ImageUrlProvider(private val api: GetConfigurationAPI) {
     }
 }
 
-
+@JsonClass(generateAdapter = true)
 data class Configuration(
-    @SerializedName("change_keys")
+    @Json(name = "change_keys")
     val changeKeys: List<String>,
-    @SerializedName("images")
+    @Json(name = "images")
     val images: Images
 )
 
+@JsonClass(generateAdapter = true)
 data class Images(
-    @SerializedName("backdrop_sizes")
+    @Json(name = "backdrop_sizes")
     val backdropSizes: List<String>,
-    @SerializedName("base_url")
+    @Json(name = "base_url")
     val baseUrl: String,
-    @SerializedName("logo_sizes")
+    @Json(name = "logo_sizes")
     val logoSizes: List<String>,
-    @SerializedName("poster_sizes")
+    @Json(name = "poster_sizes")
     val posterSizes: List<String>,
-    @SerializedName("profile_sizes")
+    @Json(name = "profile_sizes")
     val profileSizes: List<String>,
-    @SerializedName("secure_base_url")
+    @Json(name = "secure_base_url")
     val secureBaseUrl: String,
-    @SerializedName("still_sizes")
+    @Json(name = "still_sizes")
     val stillSizes: List<String>
 )

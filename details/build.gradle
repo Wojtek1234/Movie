@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion compile_sdk_version
@@ -46,8 +47,9 @@ dependencies {
     implementation constrain
     implementation depedency_injections
     implementation mvvms
-    implementation gson
     implementation google_component
+    implementation networking
+    kapt moshi_kapt
 
 
     //test

@@ -2,9 +2,7 @@ package pl.wojtek.movie
 
 
 import android.app.Application
-import mobi.szkolniak.network.networkingModule
 import mobi.wojtek.pagination.coroutinePaginationModule
-
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -15,6 +13,7 @@ import pl.wojtek.favourites.favouriteModules
 import pl.wojtek.list.moviesModules
 import pl.wojtek.movie.BuildConfig.API_KEY
 import pl.wojtek.movie.BuildConfig.API_URL
+import pl.wojtek.network.networkingModule
 
 /**
  *

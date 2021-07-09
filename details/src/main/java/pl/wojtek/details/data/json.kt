@@ -1,6 +1,7 @@
 package pl.wojtek.details.data
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import java.util.*
 
 
@@ -8,88 +9,92 @@ import java.util.*
  *
  */
 
-
+@JsonClass(generateAdapter = true)
 data class MovieDetailsNetworkResponse(
-    @SerializedName("adult")
+    @Json(name = "adult")
     val adult: Boolean,
-    @SerializedName("backdrop_path")
+    @Json(name = "backdrop_path")
     val backdropPath: String,
-    @SerializedName("belongs_to_collection")
+    @Json(name = "belongs_to_collection")
     val belongsToCollection: Any?,
-    @SerializedName("budget")
+    @Json(name = "budget")
     val budget: Int,
-    @SerializedName("genres")
+    @Json(name = "genres")
     val genres: List<Genre>,
-    @SerializedName("homepage")
+    @Json(name = "homepage")
     val homepage: String,
-    @SerializedName("id")
+    @Json(name = "id")
     val id: Int,
-    @SerializedName("imdb_id")
+    @Json(name = "imdb_id")
     val imdbId: String,
-    @SerializedName("original_language")
+    @Json(name = "original_language")
     val originalLanguage: String,
-    @SerializedName("original_title")
+    @Json(name = "original_title")
     val originalTitle: String,
-    @SerializedName("overview")
+    @Json(name = "overview")
     val overview: String,
-    @SerializedName("popularity")
+    @Json(name = "popularity")
     val popularity: Double,
-    @SerializedName("poster_path")
+    @Json(name = "poster_path")
     val posterPath: Any?,
-    @SerializedName("production_companies")
+    @Json(name = "production_companies")
     val productionCompanies: List<ProductionCompany>,
-    @SerializedName("production_countries")
+    @Json(name = "production_countries")
     val productionCountries: List<ProductionCountry>,
-    @SerializedName("release_date")
+    @Json(name = "release_date")
     val releaseDate: Date,
-    @SerializedName("revenue")
+    @Json(name = "revenue")
     val revenue: Int,
-    @SerializedName("runtime")
+    @Json(name = "runtime")
     val runtime: Int,
-    @SerializedName("spoken_languages")
+    @Json(name = "spoken_languages")
     val spokenLanguages: List<SpokenLanguage>,
-    @SerializedName("status")
+    @Json(name = "status")
     val status: String,
-    @SerializedName("tagline")
+    @Json(name = "tagline")
     val tagline: String,
-    @SerializedName("title")
+    @Json(name = "title")
     val title: String,
-    @SerializedName("video")
+    @Json(name = "video")
     val video: Boolean,
-    @SerializedName("vote_average")
+    @Json(name = "vote_average")
     val voteAverage: Double,
-    @SerializedName("vote_count")
+    @Json(name = "vote_count")
     val voteCount: Int
 )
 
+@JsonClass(generateAdapter = true)
 data class Genre(
-    @SerializedName("id")
+    @Json(name = "id")
     val id: Int,
-    @SerializedName("name")
+    @Json(name = "name")
     val name: String
 )
 
+@JsonClass(generateAdapter = true)
 data class ProductionCompany(
-    @SerializedName("id")
+    @Json(name = "id")
     val id: Int,
-    @SerializedName("logo_path")
+    @Json(name = "logo_path")
     val logoPath: String?,
-    @SerializedName("name")
+    @Json(name = "name")
     val name: String,
-    @SerializedName("origin_country")
+    @Json(name = "origin_country")
     val originCountry: String
 )
 
+@JsonClass(generateAdapter = true)
 data class ProductionCountry(
-    @SerializedName("iso_3166_1")
+    @Json(name = "iso_3166_1")
     val iso31661: String,
-    @SerializedName("name")
+    @Json(name = "name")
     val name: String
 )
 
+@JsonClass(generateAdapter = true)
 data class SpokenLanguage(
-    @SerializedName("iso_639_1")
+    @Json(name = "iso_639_1")
     val iso6391: String,
-    @SerializedName("name")
+    @Json(name = "name")
     val name: String
 )

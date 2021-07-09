@@ -1,7 +1,6 @@
 package pl.wojtek.preferences
 
 import android.content.SharedPreferences
-import com.google.gson.Gson
 
 /**
  *
@@ -17,8 +16,6 @@ interface PreferencesFacade {
     suspend fun retrieveInt(key: String): Int
     suspend fun saveBoolean(value: Boolean, key: String)
     suspend fun retrieveBoolean(key: String): Boolean
-    suspend fun putObject(key: String, any: Any)
-    suspend fun <T> getObject(key: String, type: Class<T>): T?
     suspend fun removeKey(key: String)
     suspend fun containsKey(key: String):Boolean
 }
@@ -53,16 +50,6 @@ internal class PreferencesFacadeImp(private val sharedPreferences: SharedPrefere
 
     override suspend fun retrieveLong(key: String, defValue: Long): Long {
         return sharedPreferences.getLong(key, defValue)
-    }
-
-    override suspend fun putObject(key: String, any: Any) {
-        val gson = Gson()
-        saveString(gson.toJson(any), key)
-    }
-
-    override suspend fun <T> getObject(key: String, type: Class<T>): T? {
-        val gson = Gson()
-        return gson.fromJson(retrieveString(key), type)
     }
 
     override suspend fun removeKey(key: String) = sharedPreferences.edit().remove(key).apply()

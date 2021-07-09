@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion compile_sdk_version
@@ -37,4 +38,6 @@ dependencies {
     implementation networking
     implementation coroutines
     implementation koin
+    implementation networking
+    kapt moshi_kapt
 }
